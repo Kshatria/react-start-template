@@ -54,3 +54,82 @@
  * Принимает дату создания (строка)
  * */
 // export const createRandomOperation = (createdAt: string) => {};
+
+type Category = {
+  id: string;
+  name: string;
+  photo?: string;
+};
+
+type Product = Category & {
+  photo: string;
+  desc?: string;
+  createdAt: string;
+  oldPrice?: number;
+  price: number;
+  category: Category;
+};
+
+type Cost = {
+  type: 'Cost';
+};
+
+type Profit = {
+  type: 'Profit';
+};
+
+type OperationData = {
+  id: string;
+  name: string;
+  desc?: string;
+  createdAt: string;
+  amount: number;
+  category: Category;
+};
+
+type Operation = (OperationData & Profit) | (OperationData & Cost);
+
+const fastRandString = (n: number) => {
+  return [...Array(n)].map(() => (~~(Math.random() * 36)).toString(36)).join('');
+};
+
+const getRandomInt = (max: number) => {
+  return Math.floor(Math.random() * max);
+};
+
+const getRandomBoolean = () => {
+  return !Math.round(Math.random());
+};
+
+const createRandomCategory = (): Category => {
+  return {
+    id: fastRandString(getRandomInt(4)),
+    name: fastRandString(getRandomInt(15)),
+    photo: getRandomBoolean() ? fastRandString(getRandomInt(20)) : '',
+  };
+};
+
+export const createRandomProduct = (createdAt: string): Product => {
+  return {
+    id: fastRandString(getRandomInt(4)),
+    name: fastRandString(getRandomInt(15)),
+    photo: fastRandString(getRandomInt(20)),
+    desc: getRandomBoolean() ? fastRandString(getRandomInt(100)) : '',
+    createdAt: createdAt,
+    oldPrice: getRandomBoolean() ? getRandomInt(100000) : null,
+    price: getRandomInt(100000),
+    category: createRandomCategory(),
+  };
+};
+
+export const createRandomOperation = (createdAt: string): Operation => {
+  return {
+    id: fastRandString(getRandomInt(4)),
+    name: fastRandString(getRandomInt(15)),
+    desc: getRandomBoolean() ? fastRandString(getRandomInt(100)) : '',
+    createdAt: createdAt,
+    amount: getRandomInt(20),
+    category: createRandomCategory(),
+    type: getRandomBoolean() ? 'Cost' : 'Profit',
+  } as Operation;
+};
